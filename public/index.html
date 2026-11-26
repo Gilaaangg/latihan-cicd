@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Web Latihan CI/CD</title>
+<style>
+:root{--navy:#16253d;--navy2:#1f3453;--line:#2d4468;--green:#3d9f6b;--mint:#7fd1a4;--amber:#f5b01a;--slate:#5b6784;--mist:#eef1f7}
+*{box-sizing:border-box;margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;color:var(--navy);background:var(--mist);line-height:1.6}
+.wrap{max-width:1040px;margin:0 auto}
+
+.hero{background:var(--navy);color:#fff;padding:clamp(40px,8vw,88px) clamp(20px,6vw,64px) 64px}
+.versi{display:inline-block;background:var(--amber);color:var(--navy);font-weight:700;padding:4px 16px;border-radius:999px;font-size:.95rem}
+h1{font-size:clamp(2.3rem,6.4vw,4.4rem);line-height:1.04;letter-spacing:-.025em;margin:22px 0 18px;max-width:13ch}
+.lead{color:#c5cee0;max-width:50ch;font-size:1.1rem}
+
+/* Jalur produksi: lima pos, satu garis yang terisi saat halaman dibuka */
+.belt{list-style:none;padding:0;margin:56px 0 0;display:grid;grid-template-columns:repeat(5,1fr);position:relative;counter-reset:n}
+.belt::before,.belt::after{content:"";position:absolute;left:10%;right:10%;top:20px;height:4px;border-radius:2px}
+.belt::before{background:var(--line)}
+.belt::after{background:var(--green);transform-origin:left;transform:scaleX(0);animation:isi 3.2s .4s ease-in-out forwards}
+.belt li{position:relative;text-align:center;padding:0 6px}
+.belt li::before{counter-increment:n;content:counter(n);position:relative;z-index:1;display:grid;place-items:center;width:44px;height:44px;margin:0 auto 12px;border-radius:50%;background:var(--navy2);border:3px solid var(--line);font-weight:700;animation:nyala .3s forwards}
+.belt li:nth-child(1)::before{animation-delay:.4s}
+.belt li:nth-child(2)::before{animation-delay:1.2s}
+.belt li:nth-child(3)::before{animation-delay:2s}
+.belt li:nth-child(4)::before{animation-delay:2.8s}
+.belt li:nth-child(5)::before{animation-delay:3.6s;animation-name:akhir}
+.belt b{display:block;font-size:1.05rem}
+.belt span{color:#a9b5cc;font-size:.9rem}
+@keyframes isi{to{transform:scaleX(1)}}
+@keyframes nyala{to{background:var(--green);border-color:var(--mint)}}
+@keyframes akhir{to{background:var(--amber);border-color:#ffd77a;color:var(--navy);box-shadow:0 0 0 8px rgba(245,176,26,.22)}}
+
+.isi{padding:56px clamp(20px,6vw,64px) 72px}
+.isi h2{font-size:1.5rem;margin-bottom:20px;letter-spacing:-.01em}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:48px}
+dl>div{border-left:4px solid var(--green);padding:2px 0 2px 16px;margin-bottom:20px}
+dt{font-weight:700}
+dd{color:var(--slate)}
+ol.coba{padding-left:22px;color:var(--slate)}
+ol.coba li{margin-bottom:10px;padding-left:4px}
+ol.coba strong{color:var(--navy)}
+code{background:#dfe5f1;padding:1px 7px;border-radius:5px;font-family:Consolas,"Courier New",monospace;font-size:.9em;color:var(--navy)}
+.catatan{margin-top:28px;background:var(--navy);color:#e6ebf5;padding:18px 22px;border-radius:10px;border-left:6px solid var(--amber)}
+
+@media (max-width:760px){
+  .grid{grid-template-columns:1fr;gap:32px}
+  .belt{grid-template-columns:1fr;gap:22px}
+  .belt::before,.belt::after{left:20px;right:auto;top:22px;bottom:22px;width:4px;height:auto}
+  .belt::after{transform-origin:top;transform:scaleY(0);animation-name:isi-v}
+  .belt li{display:grid;grid-template-columns:44px 1fr;column-gap:16px;text-align:left;padding:0}
+  .belt li::before{grid-row:span 2;margin:0}
+  @keyframes isi-v{to{transform:scaleY(1)}}
+}
+@media (prefers-reduced-motion:reduce){
+  .belt::after{animation:none;transform:none}
+  .belt li::before{animation:none;background:var(--green);border-color:var(--mint)}
+  .belt li:nth-child(5)::before{background:var(--amber);border-color:#ffd77a;color:var(--navy)}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="versi">Versi 1</span>
+    <h1>Halaman ini tayang otomatis</h1>
+    <p class="lead">Dari commit di GitHub sampai muncul di VPS sendiri, tanpa upload manual. Persis seperti jalur produksi roti: yang gagal di satu pos tidak akan sampai ke toko.</p>
+
+    <ol class="belt" aria-label="Jalur CI/CD">
+      <li><b>Commit</b><span>adonan masuk</span></li>
+      <li><b>Checkout</b><span>ditimbang</span></li>
+      <li><b>Test</b><span>dicek bentuknya</span></li>
+      <li><b>Deploy</b><span>dipanggang</span></li>
+      <li><b>Tayang</b><span>sampai di toko</span></li>
+    </ol>
+  </div>
+</header>
+
+<main class="isi">
+  <div class="wrap grid">
+    <section>
+      <h2>Yang bekerja di balik halaman ini</h2>
+      <dl>
+        <div><dt>GitHub</dt><dd>Sumber kebenaran. Yang tayang harus berasal dari repo, bukan dari edit manual di server.</dd></div>
+        <div><dt>Jenkins</dt><dd>Menjalankan Checkout, Test, dan Deploy setiap kali ada push.</dd></div>
+        <div><dt>Nginx</dt><dd>Menyajikan file dari <code>/var/www/html</code> ke browser.</dd></div>
+      </dl>
+    </section>
+
+    <section>
+      <h2>Coba ubah halaman ini</h2>
+      <ol class="coba">
+        <li>Buka <code>public/index.html</code> di GitHub.</li>
+        <li>Ganti tulisan <strong>Versi 1</strong> menjadi <strong>Versi 2</strong>, lalu commit.</li>
+        <li>Buka Jenkins dan lihat build baru muncul.</li>
+        <li>Refresh halaman ini. Tulisannya sudah berubah.</li>
+      </ol>
+      <p class="catatan">Kalau tes gagal, tahap Deploy dilewati dan halaman ini tetap tampil versi lama.</p>
+    </section>
+  </div>
+</main>
+
+</body>
+</html>
